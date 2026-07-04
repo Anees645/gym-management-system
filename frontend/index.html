@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Gym Management System Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+    
+        :root {
+            --bg: #121316;
+            --panel: #1B1E23;
+            --panel-alt: #22252B;
+            --border: #2A2E35;
+            --text-primary: #F5F5F3;
+            --text-muted: #9CA3AF;
+            --text-faint: #5B6069;
+            --accent: #E8B923;
+            --accent-deep: #B8860B;
+            --danger: #B3261E;
+            --danger-hover: #C6362D;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+        }
+        #login-screen {
+            background-color: var(--bg);
+            background-image: radial-gradient(circle, rgba(255,255,255,0.045) 1px, transparent 1px);
+            background-size: 22px 22px;
+            font-family: 'Inter', sans-serif;
+        }
+        .login-card {
+            position: relative;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 20px 60px -15px rgba(0,0,0,0.6);
+            overflow: hidden;
+            animation: login-card-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .login-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-deep), var(--accent) 50%, var(--accent-deep));
+        }
+        @keyframes login-card-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .login-card { animation: none; }
+        }
+        .login-eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+        .login-title {
+            font-family: 'Bebas Neue', 'Inter', sans-serif;
+            font-size: 2.75rem;
+            line-height: 1;
+            letter-spacing: 0.03em;
+            color: var(--text-primary);
+        }
+        .login-subtitle {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-muted);
+        }
+        /* Barbell divider: a bar with a plate at each end — the login page's signature element */
+        .barbell-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin: 14px 0 22px;
+        }
+        .barbell-divider .plate {
+            width: 8px;
+            height: 20px;
+            border-radius: 2px;
+            background: linear-gradient(180deg, var(--accent), var(--accent-deep));
+            flex-shrink: 0;
+        }
+        .barbell-divider .bar {
+            height: 3px;
+            width: 64px;
+            background: #3A3F47;
+        }
+ 
+        .app-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+        .app-input {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .app-input::placeholder { color: var(--text-faint); }
+        .app-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(232, 185, 35, 0.18);
+        }
+        .app-button {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 13px;
+            color: #16171A;
+            background: linear-gradient(180deg, #F0C94A, #E0AC12);
+            transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+        }
+        .app-button:hover {
+            filter: brightness(1.06);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px -6px rgba(232, 185, 35, 0.45);
+        }
+        .app-button:active { transform: translateY(0); }
+        .app-button:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+        .app-btn-secondary {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-muted);
+            background: transparent;
+            border: 1px solid var(--border);
+            transition: background 0.12s ease, color 0.12s ease;
+        }
+        .app-btn-secondary:hover {
+            background: rgba(255,255,255,0.04);
+            color: var(--text-primary);
+        }
+
+        .dash-sidebar { background: #16171A; color: var(--text-primary); }
+        .dash-sidebar-border { border-color: var(--border) !important; }
+        .dash-sidebar-footer { background: #101114; }
+        .dash-badge {
+            background: var(--accent);
+            color: #16171A;
+            font-weight: 700;
+        }
+        .dash-nav-btn { color: var(--text-muted); transition: background 0.12s ease, color 0.12s ease; }
+        .dash-nav-btn:hover { background: rgba(232,185,35,0.08); color: var(--accent); }
+        .dash-section-label { color: var(--accent); opacity: 0.75; }
+        #content-title, #modal-title {
+            font-family: 'Bebas Neue', 'Inter', sans-serif;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            color: var(--text-primary) !important;
+        }
+        #content-title { font-size: 1.9rem; }
+        #modal-title { font-size: 1.35rem; }
+        #content-subtitle { color: var(--text-muted) !important; }
+        .dash-header-border { border-color: var(--border) !important; }
+        .dash-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px -15px rgba(0,0,0,0.5);
+        }
+
+        .dash-table { border-collapse: collapse; width: 100%; }
+        .dash-th {
+            padding: 0.6rem 1rem;
+            font-weight: 600;
+            font-size: 0.78rem;
+            text-align: left;
+            text-transform: capitalize;
+            letter-spacing: 0.02em;
+            color: var(--text-muted);
+            background: var(--panel-alt);
+            border-bottom: 1px solid var(--border);
+        }
+        .dash-tr { border-bottom: 1px solid var(--border); transition: background 0.12s ease; }
+        .dash-tr:last-child { border-bottom: none; }
+        .dash-tr:hover { background: rgba(255,255,255,0.03); }
+        .dash-td {
+            padding: 0.6rem 1rem;
+            color: var(--text-primary);
+            max-width: 20rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .dash-null { color: var(--text-faint); font-style: italic; }
+        .dash-btn-edit {
+            color: #16171A;
+            background: rgba(232,185,35,0.85);
+            font-weight: 600;
+            padding: 0.3rem 0.65rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            transition: background 0.12s ease;
+        }
+        .dash-btn-edit:hover { background: var(--accent); }
+        .dash-btn-danger-sm {
+            color: #fff;
+            background: var(--danger);
+            font-weight: 600;
+            padding: 0.3rem 0.65rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            transition: background 0.12s ease;
+        }
+        .dash-btn-danger-sm:hover { background: var(--danger-hover); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="login-screen" class="flex min-h-screen items-center justify-center px-4">
+        <div class="login-card w-full max-w-md p-9">
+            <div class="text-center">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mx-auto mb-3">
+                    <rect x="3" y="9" width="2.5" height="6" rx="0.5" fill="#E8B923"/>
+                    <rect x="6.2" y="7" width="2" height="10" rx="0.5" fill="#E8B923"/>
+                    <rect x="8.7" y="10.5" width="6.6" height="3" rx="0.5" fill="#9CA3AF"/>
+                    <rect x="15.8" y="7" width="2" height="10" rx="0.5" fill="#E8B923"/>
+                    <rect x="18.5" y="9" width="2.5" height="6" rx="0.5" fill="#E8B923"/>
+                </svg>
+                <p class="login-eyebrow">Members · Trainers · Admins</p>
+                <h2 class="login-title mt-1">GYM MANAGEMENT SYSTEM</h2>
+                <div class="barbell-divider">
+                    <span class="plate"></span><span class="bar"></span><span class="plate"></span>
+                </div>
+                <p class="login-subtitle text-sm">Enter your account email to load your portal view</p>
+            </div>
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4 mt-7">
+                <div>
+                    <label class="app-label block mb-1.5">Account Email Address</label>
+                    <input type="email" id="login-email" required placeholder="name@example.com"
+                        class="app-input block w-full rounded-md px-3 py-2.5 text-sm">
+                </div>
+                <button type="submit" class="app-button flex w-full justify-center rounded-md px-4 py-3">
+                    Sign In
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="dashboard-screen" class="hidden min-h-screen flex flex-col md:flex-row">
+        <aside class="dash-sidebar w-full md:w-64 flex flex-col shrink-0">
+            <div class="dash-sidebar-border p-5 text-xl font-bold border-b flex justify-between items-center">
+                <span>Gym Dashboard</span>
+                <span id="user-badge" class="dash-badge text-xs px-2 py-1 rounded capitalize"></span>
+            </div>
+            <nav id="sidebar-menu" class="flex-1 p-4 space-y-1 overflow-y-auto max-h-[calc(100vh-140px)]"></nav>
+            <div class="dash-sidebar-footer dash-sidebar-border p-4 border-t">
+                <button onclick="handleLogout()" class="dash-nav-btn w-full text-left px-3 py-2 text-sm font-medium rounded-md">
+                    Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 p-8 overflow-y-auto h-screen">
+            <header class="dash-header-border mb-6 border-b pb-4 flex justify-between items-center">
+                <div>
+                    <h1 id="content-title" class="text-2xl font-bold">Welcome</h1>
+                    <p id="content-subtitle" class="text-sm"></p>
+                </div>
+                <button id="add-data-btn" onclick="openCreateModal()" class="app-button hidden rounded-md px-4 py-2 transition-all">
+                    + Add New Record
+                </button>
+            </header>
+
+            <div class="dash-card rounded-lg p-6">
+                <div id="content-display" class="overflow-x-auto text-gray-700">
+                    <p class="text-gray-400 italic">No section loaded yet.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="create-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50">
+        <div class="dash-card rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <h3 id="modal-title" class="mb-4">Form Interface</h3>
+            <form id="modal-form" onsubmit="submitForm(event)" class="space-y-4">
+                <input type="hidden" id="edit-record-id" value="">
+                <div id="modal-fields-container" class="space-y-3"></div>
+                <div class="dash-sidebar-border flex justify-end space-x-2 pt-2 border-t">
+                    <button type="button" onclick="closeModal()" class="app-btn-secondary rounded px-4 py-2">Cancel</button>
+                    <button type="submit" class="app-button rounded px-4 py-2">Save Entry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = "http://127.0.0.1:8000";
+        let loggedInUser = null;
+        let currentActiveSection = "";
+        let sectionDataCache = [];
+        let currentMemberProfile = null;
+        let currentTrainerProfile = null;
+        let loadToken = 0; // incremented on every section/profile load; stale responses check this and bail out
+
+        const formSchema = {
+            users: [
+                { name: "name", label: "Full Name", type: "text", required: true },
+                { name: "email", label: "Email Address", type: "email", required: true },
+                { name: "password", label: "Password Secure Key", type: "text", required: true },
+                { name: "role", label: "System Authorization Role (admin/trainer/member)", type: "text", required: true }
+            ],
+            members: [
+                { name: "user_id", label: "Linked User Account ID", type: "number", required: true },
+                { name: "first_name", label: "First Name", type: "text", required: true },
+                { name: "last_name", label: "Last Name", type: "text", required: true },
+                { name: "gender", label: "Gender", type: "text", required: true },
+                { name: "dob", label: "Date of Birth (YYYY-MM-DD)", type: "text", required: true },
+                { name: "address", label: "Address", type: "text", required: true }
+            ],
+            trainers: [
+                { name: "user_id", label: "Linked User Account ID", type: "number", required: true },
+                { name: "specialization", label: "Trainer Specialization Discipline", type: "text", required: true },
+                { name: "experience", label: "Years of Experience", type: "number", required: true },
+                { name: "salary", label: "Monthly Salary Allocation", type: "number", required: true }
+            ],
+            plans: [
+                { name: "name", label: "Membership Plan Name", type: "text", required: true },
+                { name: "description", label: "Plan Description Meta", type: "text", required: true },
+                { name: "duration_months", label: "Validity Tenure (Months)", type: "number", required: true },
+                { name: "price", label: "Base Tier Fee Price", type: "number", required: true }
+            ],
+            memberships: [
+                { name: "member_id", label: "Member ID", type: "number", required: true },
+                { name: "plan_id", label: "Plan ID", type: "number", required: true },
+                { name: "start_date", label: "Start Date (YYYY-MM-DD)", type: "text", required: true },
+                { name: "end_date", label: "End Date (YYYY-MM-DD)", type: "text", required: true },
+                { name: "status", label: "Status (Active/Pending/Expired)", type: "text", required: true }
+            ],
+            attendance: [
+                { name: "member_id", label: "Member ID Reference", type: "number", required: true },
+                { name: "check_in", label: "Check-In Timestamp (YYYY-MM-DDTHH:MM:SS)", type: "text", required: true },
+                { name: "check_out", label: "Check-Out Timestamp (YYYY-MM-DDTHH:MM:SS)", type: "text", required: true }
+            ],
+            payments: [
+                { name: "membership_id", label: "Membership ID Reference", type: "number", required: true },
+                { name: "amount", label: "Billing Amount Paid", type: "number", required: true },
+                { name: "payment_date", label: "Payment Date (YYYY-MM-DD)", type: "text", required: true },
+                { name: "payment_method", label: "Payment Method (Cash/Card)", type: "text", required: true },
+                { name: "status", label: "Status (Paid/Pending)", type: "text", required: true }
+            ],
+            "workout-plans": [
+                { name: "member_id", label: "Member ID Assignment", type: "number", required: true },
+                { name: "trainer_id", label: "Trainer ID Assigner", type: "number", required: true },
+                { name: "title", label: "Plan Title / Routine Name", type: "text", required: true },
+                { name: "description", label: "Detailed Routine Exercises", type: "text", required: true }
+            ],
+            "diet-plans": [
+                { name: "member_id", label: "Member ID Assignment", type: "number", required: true },
+                { name: "trainer_id", label: "Trainer ID Assigner", type: "number", required: true },
+                { name: "title", label: "Plan Title", type: "text", required: true },
+                { name: "calories", label: "Daily Target Caloric Goal", type: "number", required: true },
+                { name: "notes", label: "Nutritional Notes", type: "text", required: false }
+            ],
+            equipment: [
+                { name: "name", label: "Equipment Machine Name", type: "text", required: true },
+                { name: "purchase_date", label: "Purchase Date (YYYY-MM-DD)", type: "text", required: true },
+                { name: "condition", label: "Condition (Working/Damaged/etc)", type: "text", required: true },
+                { name: "location", label: "Location in Facility", type: "text", required: true }
+            ],
+            maintenance: [
+                { name: "equipment_id", label: "Equipment ID Reference", type: "number", required: true },
+                { name: "description", label: "Issue Description", type: "text", required: true },
+                { name: "cost", label: "Maintenance Cost", type: "number", required: true },
+                { name: "maintenance_date", label: "Action Date (YYYY-MM-DD)", type: "text", required: true }
+            ],
+            "progress-logs": [
+                { name: "member_id", label: "Member ID Reference", type: "number", required: true },
+                { name: "weight", label: "Weight Value (kg)", type: "number", required: true },
+                { name: "body_fat", label: "Body Fat (%)", type: "number", required: false },
+                { name: "chest", label: "Chest Measurement", type: "number", required: false },
+                { name: "waist", label: "Waist Measurement", type: "number", required: false },
+                { name: "arms", label: "Arms Measurement", type: "number", required: false },
+                { name: "date", label: "Log Date (YYYY-MM-DD)", type: "text", required: true }
+            ],
+            announcements: [
+                { name: "title", label: "Broadcast Title", type: "text", required: true },
+                { name: "description", label: "Announcement Details", type: "text", required: true }
+            ]
+        };
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById("login-email").value.trim();
+
+            fetch(`${API_BASE_URL}/users/`)
+                .then(res => res.json())
+                .then(users => {
+                    const foundUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+                    if (foundUser) {
+                        loggedInUser = foundUser;
+                        setupDashboard();
+                    } else {
+                        alert("Account email address not found in database.");
+                    }
+                })
+                .catch(err => alert("Error reaching backend connection. Is Uvicorn online?"));
+        }
+
+        function setupDashboard() {
+            document.getElementById("login-screen").classList.add("hidden");
+            document.getElementById("dashboard-screen").classList.remove("hidden");
+
+            document.getElementById("user-badge").innerText = loggedInUser.role;
+            document.getElementById("content-title").innerText = `Hello, ${loggedInUser.name}`;
+            document.getElementById("content-subtitle").innerText = `Role clearance level view panel: ${loggedInUser.role}`;
+            
+            const menu = document.getElementById("sidebar-menu");
+            menu.innerHTML = "";
+            const btnClass = "w-full text-left block px-3 py-1.5 rounded-md font-medium text-xs dash-nav-btn transition-all truncate";
+
+            if (loggedInUser.role.toLowerCase() === "admin") {
+                menu.innerHTML = `
+                    <div class="text-[10px] uppercase tracking-wider dash-section-label font-bold px-3 pt-2 pb-1">Core Identity Accounts</div>
+                    <button onclick="loadSection('users')" class="${btnClass}">👥 System Accounts</button>
+                    <button onclick="loadSection('members')" class="${btnClass}">🧑‍🤝‍🧑 Member Profiles</button>
+                    <button onclick="loadSection('trainers')" class="${btnClass}">📋 Trainer Profiles</button>
+                    <button onclick="loadSection('plans')" class="${btnClass}">🏷️ Membership Plans</button>
+                    <button onclick="loadSection('memberships')" class="${btnClass}">📜 Active Contracts</button>
+                    
+                    <div class="text-[10px] uppercase tracking-wider dash-section-label font-bold px-3 pt-3 pb-1">Operations & Fitness</div>
+                    <button onclick="loadSection('attendance')" class="${btnClass}">🕒 Attendance Tracking</button>
+                    <button onclick="loadSection('payments')" class="${btnClass}">💰 Financial Payments</button>
+                    <button onclick="loadSection('workout-plans')" class="${btnClass}">🏋️ Workout Routines</button>
+                    <button onclick="loadSection('diet-plans')" class="${btnClass}">🍏 Specialized Diets</button>
+                    
+                    <div class="text-[10px] uppercase tracking-wider dash-section-label font-bold px-3 pt-3 pb-1">Facility Management</div>
+                    <button onclick="loadSection('equipment')" class="${btnClass}">⚙️ Inventory Assets</button>
+                    <button onclick="loadSection('maintenance')" class="${btnClass}">🔧 Maintenance Log</button>
+                    <button onclick="loadSection('progress-logs')" class="${btnClass}">📈 Biometric Progress</button>
+                    <button onclick="loadSection('announcements')" class="${btnClass}">📢 Public Bulletins</button>
+                `;
+                loadSection('users');
+            } else if (loggedInUser.role.toLowerCase() === "trainer") {
+        
+                const myToken = ++loadToken;
+                menu.innerHTML = `<p class="dash-section-label text-xs px-3 pt-2">Loading your profile...</p>`;
+                document.getElementById("content-display").innerHTML =
+                    `<p class="text-gray-400 italic">Loading your trainer profile...</p>`;
+
+                fetch(`${API_BASE_URL}/trainers/`)
+                    .then(res => res.json())
+                    .then(trainers => {
+                        if (myToken !== loadToken) return; // a newer load started; drop this stale response
+                        currentTrainerProfile = trainers.find(t => t.user_id === loggedInUser.id) || null;
+
+                        if (!currentTrainerProfile) {
+                            menu.innerHTML = `
+                                <div class="text-[10px] uppercase tracking-wider dash-section-label font-bold px-3 pt-2 pb-1">Trainer View</div>
+                                <button onclick="loadSection('announcements')" class="${btnClass}">📢 System Bulletins</button>
+                            `;
+                            document.getElementById("content-display").innerHTML = `
+                                <p class="text-amber-600 italic">No trainer profile is linked to your account yet. Some sections are unavailable until an admin creates your trainer profile. You can still view bulletins.</p>
+                            `;
+                            document.getElementById("content-title").innerText = "Profile Not Set Up";
+                            return;
+                        }
+
+                        menu.innerHTML = `
+                            <div class="text-[10px] uppercase tracking-wider dash-section-label font-bold px-3 pt-2 pb-1">Trainer View</div>
+                            <button onclick="loadTrainerSection('my-workout-assignments')" class="${btnClass}">🏋️ Workout Assignments</button>
+                            <button onclick="loadTrainerSection('my-diet-assignments')" class="${btnClass}">🍏 Diet Assignments</button>
+                            <button onclick="loadSection('announcements')" class="${btnClass}">📢 System Bulletins</button>
+                        `;
+                        loadTrainerSection('my-workout-assignments');
+                    })
+                    .catch(() => {
+                        if (myToken !== loadToken) return;
+                        document.getElementById("content-display").innerHTML =
+                            `<p class="text-red-500 italic">Could not load your trainer profile. Is the backend running?</p>`;
+                    });
+            } else {
+          
+                const myToken = ++loadToken;
+                menu.innerHTML = `<p class="dash-section-label text-xs px-3 pt-2">Loading your profile...</p>`;
+                document.getElementById("content-display").innerHTML =
+                    `<p class="text-gray-400 italic">Loading your member profile...</p>`;
+
+                fetch(`${API_BASE_URL}/members/`)
+                    .then(res => res.json())
+                    .then(members => {
+                        if (myToken !== loadToken) return; // a newer load started; drop this stale response
+                        currentMemberProfile = members.find(m => m.user_id === loggedInUser.id) || null;
+
+                        if (!currentMemberProfile) {
+                            menu.innerHTML = `
+                                <div class="text-[10px] uppercase tracking-wider dash-section-label font-bold px-3 pt-2 pb-1">Member Portal</div>
+                                <button onclick="loadSection('announcements')" class="${btnClass}">📢 Gym Bulletins</button>
+                            `;
+                            document.getElementById("content-display").innerHTML = `
+                                <p class="text-amber-600 italic">No member profile is linked to your account yet. Some sections are unavailable until an admin creates your member profile. You can still view gym bulletins.</p>
+                            `;
+                            document.getElementById("content-title").innerText = "Profile Not Set Up";
+                            return;
+                        }
+
+                        menu.innerHTML = `
+                            <div class="text-[10px] uppercase tracking-wider dash-section-label font-bold px-3 pt-2 pb-1">Member Portal</div>
+                            <button onclick="loadMemberSection('my-membership')" class="${btnClass}">📜 My Membership</button>
+                            <button onclick="loadMemberSection('my-attendance')" class="${btnClass}">🕒 My Attendance</button>
+                            <button onclick="loadMemberSection('my-workouts')" class="${btnClass}">🏋️ My Workout Plans</button>
+                            <button onclick="loadMemberSection('my-diet')" class="${btnClass}">🍏 My Diet Plans</button>
+                            <button onclick="loadMemberSection('my-progress')" class="${btnClass}">📈 My Progress</button>
+                            <button onclick="loadMemberSection('my-payments')" class="${btnClass}">💰 My Payments</button>
+                            <button onclick="loadSection('announcements')" class="${btnClass}">📢 Gym Bulletins</button>
+                        `;
+                        loadMemberSection('my-membership');
+                    })
+                    .catch(() => {
+                        if (myToken !== loadToken) return;
+                        document.getElementById("content-display").innerHTML =
+                            `<p class="text-red-500 italic">Could not load your member profile. Is the backend running?</p>`;
+                    });
+            }
+        }
+
+        // Standardized record ID extraction helper
+        function getRecordId(row) {
+            if (row.id !== undefined) return row.id;
+            if (row.user_id !== undefined) return row.user_id;
+            if (row.trainer_id !== undefined) return row.trainer_id;
+            return null;
+        }
+
+        function renderTable(data, { showActions = false, section = null } = {}) {
+            const displayArea = document.getElementById("content-display");
+
+            if (!data || data.length === 0) {
+                displayArea.innerHTML = `<p class="text-gray-400 italic">No structural data entry rows loaded inside this collection schema matrix yet.</p>`;
+                return;
+            }
+
+            let keys = Object.keys(data[0]);
+            let tableHtml = `
+                <table class="dash-table text-sm">
+                    <thead>
+                        <tr>
+                            ${keys.map(k => `<th class="dash-th">${k.replace(/_/g, ' ')}</th>`).join('')}
+                            ${showActions ? `<th class="dash-th text-right">Actions</th>` : ''}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.map(row => {
+                            let rowId = getRecordId(row);
+                            return `
+                            <tr class="dash-tr">
+                                ${keys.map(k => `<td class="dash-td">${row[k] !== null ? row[k] : '<span class="dash-null">null</span>'}</td>`).join('')}
+                                ${showActions ? `
+                                    <td class="dash-td text-right whitespace-nowrap space-x-1">
+                                        <button onclick="openEditModal(${rowId})" class="dash-btn-edit">Edit</button>
+                                        <button onclick="deleteRecord('${section}', ${rowId})" class="dash-btn-danger-sm">Delete</button>
+                                    </td>
+                                ` : ''}
+                            </tr>
+                        `}).join('')}
+                    </tbody>
+                </table>
+            `;
+            displayArea.innerHTML = tableHtml;
+        }
+
+        function loadSection(section) {
+            currentActiveSection = section;
+            const myToken = ++loadToken;
+            const displayArea = document.getElementById("content-display");
+            const actionBtn = document.getElementById("add-data-btn");
+            
+            displayArea.innerHTML = `<p class="text-gray-400 italic">Querying entity records...</p>`;
+            
+            const isAdminCrud = loggedInUser.role.toLowerCase() === "admin" && !!formSchema[section];
+            if (isAdminCrud) {
+                actionBtn.classList.remove("hidden");
+            } else {
+                actionBtn.classList.add("hidden");
+            }
+
+            fetch(`${API_BASE_URL}/${section}/`)
+                .then(res => res.json())
+                .then(data => {
+                    if (myToken !== loadToken) return; // a newer load started; drop this stale response
+                    sectionDataCache = data;
+                    renderTable(data, { showActions: isAdminCrud, section });
+                })
+                .catch(err => {
+                    if (myToken !== loadToken) return;
+                    displayArea.innerHTML = `<p class="text-red-500 italic">Failed to retrieve data array index properties cleanly.</p>`;
+                });
+        }
+
+
+        function loadMemberSection(key) {
+            currentActiveSection = key;
+            const myToken = ++loadToken;
+            document.getElementById("add-data-btn").classList.add("hidden");
+            const displayArea = document.getElementById("content-display");
+            const titleEl = document.getElementById("content-title");
+            const subtitleEl = document.getElementById("content-subtitle");
+            displayArea.innerHTML = `<p class="text-gray-400 italic">Querying your records...</p>`;
+
+            if (!currentMemberProfile) {
+                displayArea.innerHTML = `<p class="text-amber-600 italic">No member profile linked to your account yet.</p>`;
+                return;
+            }
+            const myId = currentMemberProfile.id;
+
+            const sectionMeta = {
+                'my-membership': { title: "My Membership", subtitle: "Your active and past membership contracts" },
+                'my-attendance': { title: "My Attendance", subtitle: "Your check-in / check-out history" },
+                'my-workouts':   { title: "My Workout Plans", subtitle: "Routines assigned to you by your trainer" },
+                'my-diet':       { title: "My Diet Plans", subtitle: "Nutrition plans assigned to you" },
+                'my-progress':   { title: "My Progress", subtitle: "Your biometric history" },
+                'my-payments':   { title: "My Payments", subtitle: "Your billing history" },
+            };
+            titleEl.innerText = sectionMeta[key]?.title || "My Records";
+            subtitleEl.innerText = sectionMeta[key]?.subtitle || "";
+
+            const renderIfCurrent = (data) => {
+                if (myToken !== loadToken) return; // a newer load started; drop this stale response
+                renderTable(data);
+            };
+            const failIfCurrent = (msg) => {
+                if (myToken !== loadToken) return;
+                displayArea.innerHTML = `<p class="text-red-500 italic">${msg}</p>`;
+            };
+
+            if (key === 'my-membership') {
+                fetch(`${API_BASE_URL}/memberships/`)
+                    .then(res => res.json())
+                    .then(data => renderIfCurrent(data.filter(r => r.member_id === myId)))
+                    .catch(() => failIfCurrent("Failed to load your membership data."));
+
+            } else if (key === 'my-attendance') {
+                fetch(`${API_BASE_URL}/attendance/`)
+                    .then(res => res.json())
+                    .then(data => renderIfCurrent(data.filter(r => r.member_id === myId)))
+                    .catch(() => failIfCurrent("Failed to load your attendance data."));
+
+            } else if (key === 'my-workouts') {
+                fetch(`${API_BASE_URL}/workout-plans/`)
+                    .then(res => res.json())
+                    .then(data => renderIfCurrent(data.filter(r => r.member_id === myId)))
+                    .catch(() => failIfCurrent("Failed to load your workout plans."));
+
+            } else if (key === 'my-diet') {
+                fetch(`${API_BASE_URL}/diet-plans/`)
+                    .then(res => res.json())
+                    .then(data => renderIfCurrent(data.filter(r => r.member_id === myId)))
+                    .catch(() => failIfCurrent("Failed to load your diet plans."));
+
+            } else if (key === 'my-progress') {
+              
+                fetch(`${API_BASE_URL}/progress-logs/${myId}`)
+                    .then(res => res.json())
+                    .then(data => renderIfCurrent(data))
+                    .catch(() => failIfCurrent("Failed to load your progress logs."));
+
+            } else if (key === 'my-payments') {
+                
+                fetch(`${API_BASE_URL}/memberships/`)
+                    .then(res => res.json())
+                    .then(memberships => {
+                        const myMembershipIds = memberships
+                            .filter(m => m.member_id === myId)
+                            .map(m => m.id);
+                        return fetch(`${API_BASE_URL}/payments/`)
+                            .then(res => res.json())
+                            .then(payments => renderIfCurrent(
+                                payments.filter(p => myMembershipIds.includes(p.membership_id))
+                            ));
+                    })
+                    .catch(() => failIfCurrent("Failed to load your payment history."));
+            }
+        }
+
+        function loadTrainerSection(key) {
+            currentActiveSection = key;
+            const myToken = ++loadToken;
+            document.getElementById("add-data-btn").classList.add("hidden");
+            const displayArea = document.getElementById("content-display");
+            const titleEl = document.getElementById("content-title");
+            const subtitleEl = document.getElementById("content-subtitle");
+            displayArea.innerHTML = `<p class="text-gray-400 italic">Querying your records...</p>`;
+
+            if (!currentTrainerProfile) {
+                displayArea.innerHTML = `<p class="text-amber-600 italic">No trainer profile linked to your account yet.</p>`;
+                return;
+            }
+            const myId = currentTrainerProfile.id;
+
+            const sectionMeta = {
+                'my-workout-assignments': { title: "Workout Assignments", subtitle: "Routines you've assigned to your members", endpoint: "workout-plans" },
+                'my-diet-assignments':    { title: "Diet Assignments", subtitle: "Nutrition plans you've assigned to your members", endpoint: "diet-plans" },
+            };
+            const meta = sectionMeta[key];
+            titleEl.innerText = meta?.title || "My Records";
+            subtitleEl.innerText = meta?.subtitle || "";
+
+            fetch(`${API_BASE_URL}/${meta.endpoint}/`)
+                .then(res => res.json())
+                .then(data => {
+                    if (myToken !== loadToken) return; // a newer load started; drop this stale response
+                    renderTable(data.filter(r => r.trainer_id === myId));
+                })
+                .catch(() => {
+                    if (myToken !== loadToken) return;
+                    displayArea.innerHTML = `<p class="text-red-500 italic">Failed to load your assignments.</p>`;
+                });
+        }
+
+        function openCreateModal() {
+            document.getElementById("edit-record-id").value = "";
+            const fieldsContainer = document.getElementById("modal-fields-container");
+            fieldsContainer.innerHTML = "";
+            document.getElementById("modal-title").innerText = `New Record entry: ${currentActiveSection.toUpperCase().replace(/-/g, ' ')}`;
+            
+            formSchema[currentActiveSection].forEach(f => {
+                fieldsContainer.innerHTML += `
+                    <div>
+                        <label class="app-label block mb-1.5">${f.label}</label>
+                        <input type="${f.type === 'number' ? 'number' : 'text'}" step="any" name="${f.name}" id="field-${f.name}" ${f.required ? 'required' : ''} 
+                            class="app-input w-full rounded px-3 py-1.5 text-sm">
+                    </div>
+                `;
+            });
+            document.getElementById("create-modal").classList.remove("hidden");
+        }
+
+        function openEditModal(id) {
+            openCreateModal();
+            document.getElementById("edit-record-id").value = id;
+            document.getElementById("modal-title").innerText = `Modify Existing Entry Target ID: ${id}`;
+            
+            const record = sectionDataCache.find(r => getRecordId(r) === id);
+            if (record) {
+                formSchema[currentActiveSection].forEach(f => {
+                    const input = document.getElementById(`field-${f.name}`);
+                    if (input && record[f.name] !== undefined) {
+                        input.value = record[f.name];
+                    }
+                });
+            }
+        }
+
+        function closeModal() {
+            document.getElementById("create-modal").classList.add("hidden");
+            document.getElementById("modal-form").reset();
+            document.getElementById("edit-record-id").value = "";
+        }
+
+        function submitForm(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const payload = {};
+            const editId = document.getElementById("edit-record-id").value;
+            
+            formSchema[currentActiveSection].forEach(f => {
+                let val = formData.get(f.name);
+                if (val === "" && !f.required) {
+                    return; 
+                }
+                payload[f.name] = f.type === "number" ? Number(val) : val;
+            });
+
+            let url = `${API_BASE_URL}/${currentActiveSection}/`;
+            let method = "POST";
+
+            if (editId) {
+                method = "PUT";
+                url = `${API_BASE_URL}/${currentActiveSection}/${editId}`;
+            }
+
+            fetch(url, {
+                method: method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(async res => {
+                if (!res.ok) {
+                    const errorBody = await res.json().catch(() => null);
+                    const detail = errorBody && errorBody.detail
+                        ? (typeof errorBody.detail === "string" ? errorBody.detail : JSON.stringify(errorBody.detail))
+                        : `Request failed with status ${res.status}`;
+                    throw new Error(detail);
+                }
+                return res.json();
+            })
+            .then(() => {
+                closeModal();
+                loadSection(currentActiveSection);
+            })
+            .catch(err => alert(`Failed to save changes.
+
+Reason: ${err.message}`));
+        }
+
+        function deleteRecord(section, id) {
+            if (!confirm(`Are you certain you want to purge record entry sequence ID: ${id}?`)) return;
+
+            fetch(`${API_BASE_URL}/${section}/${id}`, { method: "DELETE" })
+            .then(res => {
+                if (!res.ok) throw new Error();
+                return res.json();
+            })
+            .then(() => loadSection(section))
+            .catch(err => alert("Operation restricted: This record cannot be deleted due to active database relationship constraints."));
+        }
+
+        function handleLogout() {
+            loggedInUser = null;
+            currentMemberProfile = null;
+            currentTrainerProfile = null;
+            ++loadToken; 
+            document.getElementById("login-email").value = "";
+            document.getElementById("dashboard-screen").classList.add("hidden");
+            document.getElementById("login-screen").classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
