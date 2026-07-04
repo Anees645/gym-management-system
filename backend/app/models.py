@@ -102,9 +102,6 @@ class Memberships(membershipsCreation, table=True):
     payments: list["Payments"] = Relationship(back_populates="membership")
 
 
-# ==========================================
-# OTHER SYSTEMS
-# ==========================================
 class paymentsRecord(SQLModel):
     membership_id: int = Field(foreign_key="memberships.id")
     amount: Decimal = Field(sa_type=Numeric(10, 2))
