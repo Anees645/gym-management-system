@@ -7,8 +7,8 @@ from decimal import Decimal
 class userCreation(SQLModel):
     name: str | None = Field(default=None, unique=True, max_length=50)
     email: str = Field(default=None, max_length=100, unique=True, nullable=False)
-    password: str = Field(max_length=50)  # Plain text for simple evaluation
-    role: str = Field(max_length=20)  # 'admin', 'trainer', or 'member'
+    password: str = Field(max_length=50)
+    role: str = Field(max_length=20)
     created_at: datetime = Field(default_factory=datetime.now)
 
 
