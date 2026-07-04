@@ -170,7 +170,7 @@ def update_trainer_profile(id: int, trainer_in: dict, session: SessionDep):
 
     for key, value in trainer_in.items():
         if key == "user_id" or key == "id":
-            continue  # Keep immutable identifier keys safe
+            continue
         if hasattr(db_trainer, key):
             setattr(db_trainer, key, value)
 
