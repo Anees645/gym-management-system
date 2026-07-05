@@ -1,6 +1,6 @@
 from sqlmodel import SQLModel, create_engine, Session
 
-db_url = "postgresql://postgres:55422653@localhost:5432/gym_management_system"
+db_url = "postgresql://neondb_owner:npg_hdaNf1tWqoU9@ep-sparkling-flower-at7io76p-pooler.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
 engine = create_engine(db_url)
 
 
